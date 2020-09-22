@@ -6,7 +6,7 @@ import XMonad.Hooks.SetWMName
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.ManageHelpers(doFullFloat, doCenterFloat, isFullscreen, isDialog)
+import XMonad.Hooks.ManageHelpers(doRectFloat ,doFullFloat, doCenterFloat, isFullscreen, isDialog)
 import XMonad.Config.Desktop
 import XMonad.Config.Azerty
 
@@ -58,7 +58,8 @@ myStartupHook = do
     spawn "$HOME/.xmonad/scripts/autostart.sh"
     setWMName "LG3D"
     spawnOnce "nitrogen --restore tiled"
-    spawnOn i "arandr"
+    --spawnAndDo (doRectFloat $ W.RationalRect 0.25 0.25 0.5 0.5) myTerminal
+    --windows $ W.greedyView i
 
 -- colours
 normBord = "#313742"
@@ -109,17 +110,19 @@ myManageHook = composeAll . concat $
     ]
     where
     -- doShiftAndGo = doF . liftM2 (.) W.greedyView W.shift
-    myCFloats = ["Arandr"
+    myCFloats = [ "Arandr"
                 , "Arcolinux-tweak-tool.py"
                 , "Arcolinux-welcome-app.py"
                 , "Galculator"
                 , "feh"
                 , "mpv"
                 , "Xfce4-terminal"
-                , "spotify"]
-    myTFloats = ["Downloads", "Save As..."]
+                ]
+    myTFloats = [ "Downloads"
+                , "Save As..."
+                ]
     myRFloats = []
-    myIgnores = ["desktop_window"]
+    myIgnores = [ "desktop_window"]
     --my2Shifts = ["firefox"]
     -- my1Shifts = []
     -- my3Shifts = ["Inkscape"]
@@ -157,7 +160,7 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 
 
 startup = do
-  spawnOn ii "kitty"
+  spawnOn ii myTerminal
   spawnOn iii "firefox-developer-edition"
   spawnOn vi "gimp"
   spawnOn vii "trello"
@@ -183,17 +186,25 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_w), spawn $ myBrowser )
   , ((modMask, xK_v), spawn $ "pavucontrol" )
   , ((modMask, xK_y), spawn $ "polybar-msg cmd toggle" )
-  , ((modMask, xK_Return), spawn $ myTerminal )
   , ((modMask, xK_g), spawn $ "gimp" )
   , ((modMask, xK_s), spawn $ "spotify" )
+  , ((modMask, xK_t), spawnAndDo (doRectFloat $ W.RationalRect 0.25 0.25 0.5 0.5) myTerminal )
+  , ((modMask, xK_Return), spawn $ myTerminal )
 
   -- SUPER + SHIFT KEYS
 
   , ((modMask .|. shiftMask , xK_Return ), spawn $ "rofi -show run")
+  , ((modMask .|. shiftMask , xK_t), withFocused $ windows . W.sink)
   , ((modMask .|. shiftMask , xK_f ), sendMessage $ Toggle NBFULL)
   , ((modMask .|. shiftMask , xK_r ), spawn $ "xmonad --recompile && xmonad --restart")
   , ((modMask .|. shiftMask , xK_c ), kill)
   , ((modMask .|. shiftMask , xK_q ), io (exitWith ExitSuccess))
+
+   -- XRANDR
+  , ((modMask .|. mod1Mask , xK_Up ), spawn $ "xrandr --output HDMI1 --auto --above eDP1 && xmonad --restart")
+  , ((modMask .|. mod1Mask , xK_Right ), spawn $ "xrandr --output HDMI1 --auto --right-of eDP1 && xmonad --restart")
+  , ((modMask .|. mod1Mask , xK_Down ), spawn $ "xrandr --output HDMI1 --auto --below eDP1 && xmonad --restart")
+  , ((modMask .|. mod1Mask , xK_Left ), spawn $ "xrandr --output HDMI1 --auto --left-of eDP1 && xmonad --restart")
 
   -- ALT + ... KEYS
 
@@ -235,9 +246,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   --Focus selected desktop
   , ((modMask, xK_Tab), nextWS)
   --Focus selected desktop
-  , ((modMask, xK_Up ), prevWS)
+  , ((modMask, xK_Down ), prevWS)
   --Focus selected desktop
-  , ((modMask, xK_Down ), nextWS)
+  , ((modMask, xK_Up ), nextWS)
   --  Reset the layouts on the current workspace to default.
   , ((modMask .|. shiftMask, xK_space), setLayout $ XMonad.layoutHook conf)
   -- Move focus to the next window.
@@ -248,6 +259,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask .|. shiftMask, xK_Left), prevScreen)
   -- Move focus to the next monitor.
   , ((modMask .|. shiftMask, xK_Right), nextScreen)
+  -- Swap the focused window with the next window.
+  , ((modMask .|. shiftMask, xK_Down), prevScreen)
+  -- Move focus to the next monitor.
+  , ((modMask .|. shiftMask, xK_Up), nextScreen)
   -- Swap the focused window with the next window.
   , ((modMask .|. controlMask, xK_Left), windows W.swapDown)
   -- Swap the focused window with the previous window.

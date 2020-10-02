@@ -97,19 +97,19 @@ myManageHook = composeAll . concat $
     , [title =? t --> doFloat | t <- myTFloats]
     , [resource =? r --> doFloat | r <- myRFloats]
     , [resource =? i --> doIgnore | i <- myIgnores]
-    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61612" | x <- my1Shifts]
-    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61899" | x <- my2Shifts]
-    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61947" | x <- my3Shifts]
-    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61635" | x <- my4Shifts]
-    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61502" | x <- my5Shifts]
-    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61501" | x <- my6Shifts]
-    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61705" | x <- my7Shifts]
-    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61564" | x <- my8Shifts]
-    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\62150" | x <- my9Shifts]
-    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShift "\61884" | x <- my10Shifts]
+    , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo (myWorkspaces !! 0) | x <- my1Shifts]
+    , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo (myWorkspaces !! 1) | x <- my2Shifts]
+    , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo (myWorkspaces !! 2) | x <- my3Shifts]
+    , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo (myWorkspaces !! 3) | x <- my4Shifts]
+    , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo (myWorkspaces !! 4) | x <- my5Shifts]
+    , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo (myWorkspaces !! 5) | x <- my6Shifts]
+    , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo (myWorkspaces !! 6) | x <- my7Shifts]
+    , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo (myWorkspaces !! 7) | x <- my8Shifts]
+    , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo (myWorkspaces !! 8) | x <- my9Shifts]
+    , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo (myWorkspaces !! 9) | x <- my10Shifts]
     ]
     where
-    -- doShiftAndGo = doF . liftM2 (.) W.greedyView W.shift
+    doShiftAndGo = doF . liftM2 (.) W.greedyView W.shift
     myCFloats = [ "Arandr"
                 , "Arcolinux-tweak-tool.py"
                 , "Arcolinux-welcome-app.py"
@@ -121,18 +121,18 @@ myManageHook = composeAll . concat $
     myTFloats = [ "Downloads"
                 , "Save As..."
                 ]
-    myRFloats = []
-    myIgnores = [ "desktop_window"]
-    --my2Shifts = ["firefox"]
-    -- my1Shifts = []
-    -- my3Shifts = ["Inkscape"]
-    -- my4Shifts = []
-    -- my5Shifts = ["Gimp", "feh"]
-    -- my6Shifts = ["vlc", "mpv"]
-    -- my7Shifts = ["Virtualbox"]
-    -- my8Shifts = ["Thunar"]
-    -- my9Shifts = ["discord"]
-    --my10Shifts = ["spotify"]
+    myRFloats  = []
+    myIgnores  = ["desktop_window"]
+    my1Shifts  = []
+    my2Shifts  = []
+    my3Shifts  = ["firefoxdeveloperedition","Firefox Developer Edition"]
+    my4Shifts  = ["jetbrains-idea"]
+    my5Shifts  = ["code-oss","Code","code"]
+    my6Shifts  = ["Gimp","gimp"]
+    my7Shifts  = ["trello","Trello"]
+    my8Shifts  = ["slack","Slack"]
+    my9Shifts  = ["discord","Discord"]
+    my10Shifts = ["Spotify","Spotify Free","spotify"]
 
 
 
@@ -160,12 +160,10 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 
 
 startup = do
-  spawnOn ii myTerminal
-  spawnOn iii "firefox-developer-edition"
-  spawnOn vi "gimp"
-  spawnOn vii "trello"
-  spawnOn viii "slack"
-  spawnOn ix "discord"
+  spawn "firefox-developer-edition"
+  spawn "trello"
+  spawn "slack"
+  spawn "discord"
   spawnOn x "spotify"
 
 
@@ -180,6 +178,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- SUPER + FUNCTION KEYS
 
+  , ((modMask, xK_c), spawn $ "code" )
+  , ((modMask, xK_d), spawn $ "discord" )
   , ((modMask, xK_f), spawn $ "thunar" )
   , ((modMask, xK_h), spawn $ "urxvt 'htop task manager' -e htop" )
   , ((modMask, xK_j), spawn $ "intellij-idea-ultimate" )

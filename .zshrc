@@ -2,6 +2,7 @@ export ZSH=~/.oh-my-zsh
 
 plugins=(
   git
+  asdf
 )
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.

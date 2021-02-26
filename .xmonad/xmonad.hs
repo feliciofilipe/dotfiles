@@ -48,18 +48,15 @@ ii   = "\61728"
 iii  = "\57351"
 iv   = "\62692"
 v    = "\61729"
-vi   = "\63352"
+vi   = "\xf109"
 vii  = "\61825"
 viii = "\61848"
 ix   = "\62354"
 x    = "\61884"
 
 myStartupHook = do
-    spawn "$HOME/.xmonad/scripts/autostart.sh"
-    setWMName "LG3D"
-    spawnOnce "nitrogen --restore tiled"
-    --spawnAndDo (doRectFloat $ W.RationalRect 0.25 0.25 0.5 0.5) myTerminal
-    --windows $ W.greedyView i
+    spawn "nitrogen --restore tiled"
+    spawn "$HOME/.xmonad/scripts/autostart.sh &"
 
 -- colours
 normBord = "#313742"
@@ -128,7 +125,7 @@ myManageHook = composeAll . concat $
     my3Shifts  = ["firefoxdeveloperedition","Firefox Developer Edition"]
     my4Shifts  = ["jetbrains-idea"]
     my5Shifts  = ["code-oss","Code","code"]
-    my6Shifts  = ["Gimp","gimp"]
+    my6Shifts  = ["VirtualBox","virtualbox","Illustrator","illustrator"]
     my7Shifts  = ["trello","Trello"]
     my8Shifts  = ["slack","Slack"]
     my9Shifts  = ["discord","Discord"]
@@ -164,7 +161,14 @@ startup = do
   spawn "trello"
   spawn "slack"
   spawn "discord"
-  spawnOn x "spotify"
+  --spawn "code"
+  --spawnOn vi "virtualbox"
+  spawnOn x  "spotify"
+  spawnOn ii myTerminal
+  spawnOn ii myTerminal
+  spawnOn ii myTerminal
+  --spawnAndDo (doRectFloat $ W.RationalRect 0.25 0.25 0.5 0.5) $ myTerminal
+  --windows $ W.greedyView i
 
 
 -- keys config
@@ -178,17 +182,19 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- SUPER + FUNCTION KEYS
 
+  , ((modMask, xK_b), spawn $ "mysql-workbench" )
   , ((modMask, xK_c), spawn $ "code" )
   , ((modMask, xK_d), spawn $ "discord" )
   , ((modMask, xK_f), spawn $ "thunar" )
+  , ((modMask, xK_g), spawn $ "gimp" )
   , ((modMask, xK_h), spawn $ "urxvt 'htop task manager' -e htop" )
   , ((modMask, xK_j), spawn $ "intellij-idea-ultimate" )
-  , ((modMask, xK_w), spawn $ myBrowser )
-  , ((modMask, xK_v), spawn $ "pavucontrol" )
-  , ((modMask, xK_y), spawn $ "polybar-msg cmd toggle" )
-  , ((modMask, xK_g), spawn $ "gimp" )
   , ((modMask, xK_s), spawn $ "spotify" )
   , ((modMask, xK_t), spawnAndDo (doRectFloat $ W.RationalRect 0.25 0.25 0.5 0.5) myTerminal )
+  , ((modMask, xK_v), spawn $ "pavucontrol" )
+  , ((modMask, xK_x), spawn $ "kitty -e nvim .xmonad/xmonad.hs")
+  , ((modMask, xK_y), spawn $ "polybar-msg cmd toggle" )
+  , ((modMask, xK_w), spawn $ myBrowser )
   , ((modMask, xK_Return), spawn $ myTerminal )
 
   -- SUPER + SHIFT KEYS
@@ -201,10 +207,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask .|. shiftMask , xK_q ), io (exitWith ExitSuccess))
 
    -- XRANDR
-  , ((modMask .|. mod1Mask , xK_Up ), spawn $ "xrandr --output HDMI1 --auto --above eDP1 && xmonad --restart")
-  , ((modMask .|. mod1Mask , xK_Right ), spawn $ "xrandr --output HDMI1 --auto --right-of eDP1 && xmonad --restart")
-  , ((modMask .|. mod1Mask , xK_Down ), spawn $ "xrandr --output HDMI1 --auto --below eDP1 && xmonad --restart")
-  , ((modMask .|. mod1Mask , xK_Left ), spawn $ "xrandr --output HDMI1 --auto --left-of eDP1 && xmonad --restart")
+  , ((modMask .|. mod1Mask , xK_Up ), spawn $ "xrandr --output HDMI2 --auto --above eDP1 && xmonad --restart")
+  , ((modMask .|. mod1Mask , xK_Right ), spawn $ "xrandr --output HDMI2 --auto --right-of eDP1 && xmonad --restart")
+  , ((modMask .|. mod1Mask , xK_Down ), spawn $ "xrandr --output HDMI2 --auto --below eDP1 && xmonad --restart")
+  , ((modMask .|. mod1Mask , xK_Left ), spawn $ "xrandr --output HDMI2 --auto --left-of eDP1 && xmonad --restart")
 
   -- ALT + ... KEYS
 

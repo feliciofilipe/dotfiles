@@ -55,12 +55,12 @@ ix   = "\62354"
 x    = "\61884"
 
 myStartupHook = do
-    spawn "nitrogen --restore tiled"
     spawn "$HOME/.xmonad/scripts/autostart.sh &"
+    spawn "nitrogen --restore"
 
 -- colours
 normBord = "#313742"
-focdBord = "#313742"
+focdBord = "#a4abc2"
 fore     = "#DEE3E0"
 back     = "#282c34"
 winType  = "#c678dd"
@@ -83,7 +83,7 @@ myWorkspaces    = [i,ii,iii,iv,v,vi,vii,viii,ix,x]
 
 myTerminal = "kitty"
 
-myBrowser = "firefox-developer-edition"
+myBrowser = "firefox"
 
 myBaseConfig = desktopConfig
 
@@ -122,7 +122,7 @@ myManageHook = composeAll . concat $
     myIgnores  = ["desktop_window"]
     my1Shifts  = []
     my2Shifts  = []
-    my3Shifts  = ["firefoxdeveloperedition","Firefox Developer Edition"]
+    my3Shifts  = ["firefoxdeveloperedition","Firefox Developer Edition","firefox","Firefox"]
     my4Shifts  = ["jetbrains-idea"]
     my5Shifts  = ["code-oss","Code","code"]
     my6Shifts  = ["VirtualBox","virtualbox","Illustrator","illustrator"]
@@ -170,6 +170,10 @@ startup = do
   --spawnAndDo (doRectFloat $ W.RationalRect 0.25 0.25 0.5 0.5) $ myTerminal
   --windows $ W.greedyView i
 
+--coderdojo = do
+--  spawnOn ii "kitty -e npm run dev ~/CoderDojo/shuriken/"  
+--  spawnOn ii "kitty -e docker-compose -f docker-compose.dev.yml up -d db"
+--  spawnOn ii "kitty -e mix phx.server ~/CoderDojo/bokken/"
 
 -- keys config
 
@@ -189,12 +193,16 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_g), spawn $ "gimp" )
   , ((modMask, xK_h), spawn $ "urxvt 'htop task manager' -e htop" )
   , ((modMask, xK_j), spawn $ "intellij-idea-ultimate" )
+  , ((modMask, xK_k), spawn $ "kdenlive" )
+  , ((modMask, xK_o), spawn $ "obs" )
+  , ((modMask, xK_p), spawn $ "postman" )
   , ((modMask, xK_s), spawn $ "spotify" )
   , ((modMask, xK_t), spawnAndDo (doRectFloat $ W.RationalRect 0.25 0.25 0.5 0.5) myTerminal )
   , ((modMask, xK_v), spawn $ "pavucontrol" )
   , ((modMask, xK_x), spawn $ "kitty -e nvim .xmonad/xmonad.hs")
   , ((modMask, xK_y), spawn $ "polybar-msg cmd toggle" )
   , ((modMask, xK_w), spawn $ myBrowser )
+  , ((modMask, xK_z), spawn $ "kitty -e nvim .zshrc")
   , ((modMask, xK_Return), spawn $ myTerminal )
 
   -- SUPER + SHIFT KEYS
@@ -202,9 +210,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask .|. shiftMask , xK_Return ), spawn $ "rofi -show run")
   , ((modMask .|. shiftMask , xK_t), withFocused $ windows . W.sink)
   , ((modMask .|. shiftMask , xK_f ), sendMessage $ Toggle NBFULL)
+  , ((modMask .|. shiftMask , xK_d ), coderdojo)
   , ((modMask .|. shiftMask , xK_r ), spawn $ "xmonad --recompile && xmonad --restart")
   , ((modMask .|. shiftMask , xK_c ), kill)
-  , ((modMask .|. shiftMask , xK_q ), io (exitWith ExitSuccess))
+  , ((modMask .|. shiftMask , xK_q ), io $ exitWith ExitSuccess)
 
    -- XRANDR
   , ((modMask .|. mod1Mask , xK_Up ), spawn $ "xrandr --output HDMI2 --auto --above eDP1 && xmonad --restart")

@@ -1,0 +1,5 @@
+
+xmonad.hs:213:39: error: Variable not in scope: coderdojo :: X ()
+    |
+213 |   , ((modMask .|. shiftMask , xK_d ), coderdojo)
+    |                                       ^^^^^^^^^
